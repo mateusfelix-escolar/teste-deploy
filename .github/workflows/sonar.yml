@@ -45,12 +45,7 @@ jobs:
         run: |
           echo "Querying SonarQube for CODE_SMELL issues..."
           resp=$(curl -s -u ${SONAR_TOKEN}: "${SONAR_HOST_URL}/api/issues/search?componentKeys=mateusfelix-escolar_teste-deploy&types=CODE_SMELL&resolved=false")
-          total=$(python3 - <<PY
-import sys, json
-obj=json.load(sys.stdin)
-print(obj.get('total',0))
-PY
-<<<"$resp")
+          total=$(python3 -c 'import sys, json; obj=json.load(sys.stdin); print(obj.get("total",0))' <<<"$resp")
           echo "Code Smells total: $total"
           if [ "$total" -gt 0 ]; then
             echo "Found code smells (>0) — failing workflow"

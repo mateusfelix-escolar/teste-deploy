@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar - LojaCarro</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/js/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="form-card">
+      <h2>Entrar</h2>
+      <p>Use suas credenciais da API para acessar os recursos protegidos.</p>
+      <div id="status" class="status">Informe seu usuário e senha.</div>
+      <form onsubmit="loginUser(event)">
+        <div class="form-grid">
+          <div>
+            <label for="username">Usuário</label>
+            <input id="username" name="username" required />
+          </div>
+          <div>
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" required />
+          </div>
+          <button class="btn btn-primary" type="submit">Entrar</button>
+          <a class="link" href="/pages/register.html">Ainda não tenho conta</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

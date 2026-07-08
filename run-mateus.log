@@ -1,0 +1,295 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2026-06-25T13:29:28.100Z  INFO 38134 --- [LojaCarro] [           main] b.o.e.i.LojaCarro.LojaCarroApplication   : Starting LojaCarroApplication v0.0.1-SNAPSHOT using Java 17.0.19 with PID 38134 (/workspaces/teste-deploy/target/mateus.jar started by codespace in /workspaces/teste-deploy)
+2026-06-25T13:29:28.108Z DEBUG 38134 --- [LojaCarro] [           main] b.o.e.i.LojaCarro.LojaCarroApplication   : Running with Spring Boot v3.5.7, Spring v6.2.12
+2026-06-25T13:29:28.109Z  INFO 38134 --- [LojaCarro] [           main] b.o.e.i.LojaCarro.LojaCarroApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-06-25T13:29:30.120Z  INFO 38134 --- [LojaCarro] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25T13:29:30.210Z  INFO 38134 --- [LojaCarro] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 79 ms. Found 3 JPA repository interfaces.
+2026-06-25T13:29:31.174Z  INFO 38134 --- [LojaCarro] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-06-25T13:29:31.189Z  INFO 38134 --- [LojaCarro] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-25T13:29:31.190Z  INFO 38134 --- [LojaCarro] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-06-25T13:29:31.236Z  INFO 38134 --- [LojaCarro] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-25T13:29:31.238Z  INFO 38134 --- [LojaCarro] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2968 ms
+2026-06-25T13:29:31.469Z  INFO 38134 --- [LojaCarro] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-25T13:29:31.607Z  INFO 38134 --- [LojaCarro] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2026-06-25T13:29:31.714Z  INFO 38134 --- [LojaCarro] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-25T13:29:32.739Z  INFO 38134 --- [LojaCarro] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25T13:29:32.847Z  INFO 38134 --- [LojaCarro] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-25T13:29:33.452Z  INFO 38134 --- [LojaCarro] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@785a4557
+2026-06-25T13:29:33.456Z  INFO 38134 --- [LojaCarro] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-25T13:29:33.576Z  WARN 38134 --- [LojaCarro] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-25T13:29:33.579Z  WARN 38134 --- [LojaCarro] [           main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-25T13:29:33.613Z  INFO 38134 --- [LojaCarro] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25T13:29:35.287Z  INFO 38134 --- [LojaCarro] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    create table carro (
+        id bigint not null auto_increment,
+        ano integer not null,
+        modelo varchar(255) not null,
+        preco float(53) not null,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    create table roles (
+        id bigint not null auto_increment,
+        name enum ('ROLE_ADMIN','ROLE_CLIENTE','ROLE_GERENTE','ROLE_VENDEDOR') not null,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    create table usuario_roles (
+        usuario_id bigint not null,
+        role_id bigint not null,
+        primary key (usuario_id, role_id)
+    ) engine=InnoDB
+Hibernate: 
+    create table usuarios (
+        id bigint not null auto_increment,
+        account_non_expired bit not null,
+        account_non_locked bit not null,
+        credentials_non_expired bit not null,
+        email varchar(255) not null,
+        enabled boolean default true not null,
+        full_name varchar(100) not null,
+        password varchar(255) not null,
+        username varchar(50) not null,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    alter table roles 
+       drop index UKofx66keruapi6vyqpv6f2or37
+Hibernate: 
+    alter table roles 
+       add constraint UKofx66keruapi6vyqpv6f2or37 unique (name)
+Hibernate: 
+    alter table usuarios 
+       drop index UKkfsp0s1tflm1cwlj8idhqsad0
+Hibernate: 
+    alter table usuarios 
+       add constraint UKkfsp0s1tflm1cwlj8idhqsad0 unique (email)
+Hibernate: 
+    alter table usuarios 
+       drop index UKm2dvbwfge291euvmk6vkkocao
+Hibernate: 
+    alter table usuarios 
+       add constraint UKm2dvbwfge291euvmk6vkkocao unique (username)
+Hibernate: 
+    alter table usuario_roles 
+       add constraint FKtk4qndf0xt1ijkk4a7wj5vnwb 
+       foreign key (role_id) 
+       references roles (id)
+Hibernate: 
+    alter table usuario_roles 
+       add constraint FKuu9tea04xb29m2km5lwe46ua 
+       foreign key (usuario_id) 
+       references usuarios (id)
+2026-06-25T13:29:35.861Z  INFO 38134 --- [LojaCarro] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25T13:29:36.530Z DEBUG 38134 --- [LojaCarro] [           main] b.o.e.i.L.s.JwtAuthenticationFilter      : Filter 'jwtAuthenticationFilter' configured for use
+2026-06-25T13:29:36.670Z  INFO 38134 --- [LojaCarro] [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-25T13:29:36.671Z  WARN 38134 --- [LojaCarro] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-25T13:29:36.872Z  WARN 38134 --- [LojaCarro] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25T13:29:38.375Z  INFO 38134 --- [LojaCarro] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-06-25T13:29:38.500Z  INFO 38134 --- [LojaCarro] [           main] b.o.e.i.LojaCarro.LojaCarroApplication   : Started LojaCarroApplication in 11.996 seconds (process running for 12.944)
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        roles
+        (name) 
+    values
+        (?)
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        roles
+        (name) 
+    values
+        (?)
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        roles
+        (name) 
+    values
+        (?)
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        roles
+        (name) 
+    values
+        (?)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        usuarios u1_0 
+    where
+        u1_0.username=? 
+    limit
+        ?
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        usuarios
+        (account_non_expired, account_non_locked, credentials_non_expired, email, enabled, full_name, password, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        usuario_roles
+        (usuario_id, role_id) 
+    values
+        (?, ?)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        usuarios u1_0 
+    where
+        u1_0.username=? 
+    limit
+        ?
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        usuarios
+        (account_non_expired, account_non_locked, credentials_non_expired, email, enabled, full_name, password, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        usuario_roles
+        (usuario_id, role_id) 
+    values
+        (?, ?)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        usuarios u1_0 
+    where
+        u1_0.username=? 
+    limit
+        ?
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        usuarios
+        (account_non_expired, account_non_locked, credentials_non_expired, email, enabled, full_name, password, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        usuario_roles
+        (usuario_id, role_id) 
+    values
+        (?, ?)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        usuarios u1_0 
+    where
+        u1_0.username=? 
+    limit
+        ?
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.name 
+    from
+        roles r1_0 
+    where
+        r1_0.name=?
+Hibernate: 
+    insert 
+    into
+        usuarios
+        (account_non_expired, account_non_locked, credentials_non_expired, email, enabled, full_name, password, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        usuario_roles
+        (usuario_id, role_id) 
+    values
+        (?, ?)
+2026-06-25T13:29:40.562Z  INFO 38134 --- [LojaCarro] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25T13:29:40.572Z  INFO 38134 --- [LojaCarro] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-25T13:29:40.591Z  INFO 38134 --- [LojaCarro] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25T13:29:40.597Z  INFO 38134 --- [LojaCarro] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-06-25T13:29:40.612Z  INFO 38134 --- [LojaCarro] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

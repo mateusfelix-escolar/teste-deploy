@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LojaCarro API Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f7fb; color: #1f2937; }
+    .page { max-width: 980px; margin: 24px auto; padding: 24px; background: #ffffff; border-radius: 12px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); }
+    h1, h2 { margin: 0 0 16px; }
+    .section { margin-bottom: 28px; }
+    .field { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .field label { font-weight: 600; }
+    .field input, .field textarea, .field button, .field select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; }
+    .field button { border: none; background: #2563eb; color: white; cursor: pointer; transition: background .2s ease-in-out; }
+    .field button:hover { background: #1d4ed8; }
+    .output { white-space: pre-wrap; font-family: Menlo, Monaco, Consolas, monospace; background: #0f172a; color: #e2e8f0; padding: 16px; border-radius: 12px; overflow-x: auto; min-height: 160px; }
+    .hint { font-size: 0.95rem; color: #475569; margin-top: -8px; margin-bottom: 12px; }
+    .inline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .small-button { padding: 10px 14px; font-size: 0.95rem; }
+    .status { font-weight: 700; margin-top: 12px; }
+    .token-badge { background: #f1f5f9; padding: 10px 12px; border-radius: 8px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>LojaCarro API Test</h1>
+    <p>Teste a API REST do backend. Defina a URL base e use as seções abaixo para autenticar e chamar endpoints.</p>
+
+    <div class="section">
+      <div class="field">
+        <label for="baseUrl">URL base</label>
+        <input id="baseUrl" type="url" value="https://fluffy-barnacle-xr5jj59xj4qxfvvj5-8080.app.github.dev" />
+      </div>
+      <div class="field">
+        <label>JWT token</label>
+        <div class="token-badge" id="jwtToken">Nenhum token recebido</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>1) Registrar usuário</h2>
+      <div class="field"><label for="registerUsername">Usuário</label><input id="registerUsername" type="text" value="usuario1" /></div>
+      <div class="field"><label for="registerEmail">Email</label><input id="registerEmail" type="email" value="usuario1@example.com" /></div>
+      <div class="field"><label for="registerPassword">Senha</label><input id="registerPassword" type="password" value="senha123" /></div>
+      <div class="field"><label for="registerFullName">Nome completo</label><input id="registerFullName" type="text" value="Usuario Teste" /></div>
+      <div class="field"><label></label><button onclick="registerUser()">Registrar</button></div>
+    </div>
+
+    <div class="section">
+      <h2>2) Login</h2>
+      <div class="field"><label for="loginUsername">Usuário</label><input id="loginUsername" type="text" value="usuario1" /></div>
+      <div class="field"><label for="loginPassword">Senha</label><input id="loginPassword" type="password" value="senha123" /></div>
+      <div class="field"><label></label><button onclick="loginUser()">Login</button></div>
+      <div class="hint">O token obtido aqui será usado para operações protegidas: salvar, atualizar e deletar carros.</div>
+    </div>
+
+    <div class="section">
+      <h2>3) Carros públicos</h2>
+      <div class="field"><label></label><button onclick="listCarros()">Listar todos os carros</button></div>
+      <div class="field"><label for="getCarroId">ID do carro</label><input id="getCarroId" type="number" min="1" placeholder="Ex: 1" /></div>
+      <div class="field"><label></label><button onclick="getCarroById()">Buscar por ID</button></div>
+    </div>
+
+    <div class="section">
+      <h2>4) Criar carro</h2>
+      <div class="field"><label for="newModelo">Modelo</label><input id="newModelo" type="text" value="Gol" /></div>
+      <div class="field"><label for="newAno">Ano</label><input id="newAno" type="number" value="2024" min="1900" max="2100" /></div>
+      <div class="field"><label for="newPreco">Preço</label><input id="newPreco" type="number" value="85000" min="0" step="0.01" /></div>
+      <div class="field"><label></label><button onclick="createCarro()">Criar carro</button></div>
+      <div class="hint">Requer token JWT e role GERENTE ou VENDEDOR.</div>
+    </div>
+
+    <div class="section">
+      <h2>5) Atualizar carro</h2>
+      <div class="field"><label for="updateId">ID do carro</label><input id="updateId" type="number" min="1" placeholder="Ex: 1" /></div>
+      <div class="field"><label for="updateModelo">Modelo</label><input id="updateModelo" type="text" value="Gol Turbo" /></div>
+      <div class="field"><label for="updateAno">Ano</label><input id="updateAno" type="number" value="2024" min="1900" max="2100" /></div>
+      <div class="field"><label for="updatePreco">Preço</label><input id="updatePreco" type="number" value="89000" min="0" step="0.01" /></div>
+      <div class="field"><label></label><button onclick="updateCarro()">Atualizar carro</button></div>
+      <div class="hint">Requer token JWT e role GERENTE.</div>
+    </div>
+
+    <div class="section">
+      <h2>6) Deletar carro</h2>
+      <div class="field"><label for="deleteId">ID do carro</label><input id="deleteId" type="number" min="1" placeholder="Ex: 1" /></div>
+      <div class="field"><label></label><button onclick="deleteCarro()">Deletar carro</button></div>
+      <div class="hint">Requer token JWT e role GERENTE.</div>
+    </div>
+
+    <div class="section">
+      <h2>Saída</h2>
+      <div id="output" class="output">Resultados da API aparecerão aqui.</div>
+    </div>
+  </div>
+
+  <script>
+    let jwtToken = null;
+
+    function getBaseUrl() {
+      const input = document.getElementById('baseUrl');
+      return input.value.trim().replace(/\/+$/, '');
+    }
+
+    function updateTokenDisplay() {
+      const display = document.getElementById('jwtToken');
+      display.textContent = jwtToken ? jwtToken : 'Nenhum token recebido';
+    }
+
+    function showOutput(title, data) {
+      const output = document.getElementById('output');
+      const text = `${title}\n\n${JSON.stringify(data, null, 2)}`;
+      output.textContent = text;
+    }
+
+    async function request(path, options = {}) {
+      const url = `${getBaseUrl()}${path}`;
+      const headers = {
+        ...options.headers,
+      };
+
+      if (options.body) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      if (jwtToken && !options.skipAuth) {
+        headers['Authorization'] = `Bearer ${jwtToken}`;
+      }
+
+      try {
+        const response = await fetch(url, { ...options, headers });
+        const contentType = response.headers.get('content-type') || '';
+        let body = null;
+        if (contentType.includes('application/json')) {
+          body = await response.json();
+        } else {
+          body = await response.text();
+        }
+        if (!response.ok) {
+          throw { status: response.status, body };
+        }
+        return body;
+      } catch (error) {
+        if (error.status) {
+          showOutput(`Erro ${error.status} em ${path}`, error.body);
+          return null;
+        }
+        showOutput('Erro de rede ou inesperado', error.message || error);
+        return null;
+      }
+    }
+
+    async function registerUser() {
+      const payload = {
+        username: document.getElementById('registerUsername').value.trim(),
+        email: document.getElementById('registerEmail').value.trim(),
+        password: document.getElementById('registerPassword').value,
+        fullName: document.getElementById('registerFullName').value.trim(),
+      };
+      const result = await request('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        skipAuth: true,
+      });
+      if (result !== null) {
+        showOutput('Registro concluído', result);
+      }
+    }
+
+    async function loginUser() {
+      const payload = {
+        username: document.getElementById('loginUsername').value.trim(),
+        password: document.getElementById('loginPassword').value,
+      };
+      const result = await request('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        skipAuth: true,
+      });
+      if (result !== null) {
+        jwtToken = result.token || result.accessToken || JSON.stringify(result);
+        updateTokenDisplay();
+        showOutput('Login bem-sucedido', result);
+      }
+    }
+
+    async function listCarros() {
+      const result = await request('/carro', { method: 'GET', skipAuth: true });
+      if (result !== null) {
+        showOutput('Carros listados', result);
+      }
+    }
+
+    async function getCarroById() {
+      const id = document.getElementById('getCarroId').value.trim();
+      if (!id) {
+        showOutput('ID inválido', 'Informe um ID de carro para buscar.');
+        return;
+      }
+      const result = await request(`/carro/${encodeURIComponent(id)}`, { method: 'GET', skipAuth: true });
+      if (result !== null) {
+        showOutput(`Carro ${id}`, result);
+      }
+    }
+
+    async function createCarro() {
+      const payload = {
+        modelo: document.getElementById('newModelo').value.trim(),
+        ano: Number(document.getElementById('newAno').value),
+        preco: Number(document.getElementById('newPreco').value),
+      };
+      const result = await request('/carro/salvar', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      if (result !== null) {
+        showOutput('Carro criado', result);
+      }
+    }
+
+    async function updateCarro() {
+      const id = document.getElementById('updateId').value.trim();
+      if (!id) {
+        showOutput('ID inválido', 'Informe um ID de carro para atualizar.');
+        return;
+      }
+      const payload = {
+        modelo: document.getElementById('updateModelo').value.trim(),
+        ano: Number(document.getElementById('updateAno').value),
+        preco: Number(document.getElementById('updatePreco').value),
+      };
+      const result = await request(`/carro/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+      });
+      if (result !== null) {
+        showOutput(`Carro ${id} atualizado`, result);
+      }
+    }
+
+    async function deleteCarro() {
+      const id = document.getElementById('deleteId').value.trim();
+      if (!id) {
+        showOutput('ID inválido', 'Informe um ID de carro para deletar.');
+        return;
+      }
+      const result = await request(`/carro/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (result !== null) {
+        showOutput(`Carro ${id} deletado`, result || 'Resposta vazia');
+      }
+    }
+
+    updateTokenDisplay();
+  </script>
+</body>
+</html>

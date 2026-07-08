@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Criar conta - LojaCarro</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/js/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="form-card">
+      <h2>Criar conta</h2>
+      <p>Cadastre-se para usar os recursos da API.</p>
+      <div id="status" class="status">Preencha os campos abaixo.</div>
+      <form onsubmit="registerUser(event)">
+        <div class="form-grid">
+          <div>
+            <label for="username">Usuário</label>
+            <input id="username" name="username" required />
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+          <div>
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" required />
+          </div>
+          <div>
+            <label for="fullName">Nome completo</label>
+            <input id="fullName" name="fullName" required />
+          </div>
+          <button class="btn btn-primary" type="submit">Criar conta</button>
+          <a class="link" href="/pages/login.html">Já tenho conta</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

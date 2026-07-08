@@ -1,0 +1,58 @@
+name: SonarQube Analysis and Code Smells Check
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build, run tests and run Sonar analysis
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B clean verify sonar:sonar \
+            -Dsonar.host.url=${SONAR_HOST_URL} \
+            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.projectKey=mateusfelix-escolar_teste-deploy \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco/jacoco.xml
+
+      - name: Fail if Code Smells exist
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          echo "Querying SonarQube for CODE_SMELL issues..."
+          resp=$(curl -s -u ${SONAR_TOKEN}: "${SONAR_HOST_URL}/api/issues/search?componentKeys=mateusfelix-escolar_teste-deploy&types=CODE_SMELL&resolved=false")
+          total=$(python3 - <<PY
+import sys, json
+obj=json.load(sys.stdin)
+print(obj.get('total',0))
+PY
+<<<"$resp")
+          echo "Code Smells total: $total"
+          if [ "$total" -gt 0 ]; then
+            echo "Found code smells (>0) — failing workflow"
+            exit 1
+          fi

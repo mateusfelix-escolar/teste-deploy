@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LojaCarro Frontend</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Frontend simples para a API LojaCarro</p>
+        <h1>Explore carros, faça login e gerencie a loja com um clique.</h1>
+        <p class="lead">Uma interface leve, sem framework, pronta para rodar em um jar simples e servir via navegador.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/pages/login.html">Entrar</a>
+        <a class="btn btn-secondary" href="/pages/register.html">Criar conta</a>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <h2>Listar carros</h2>
+        <p>Veja os veículos disponíveis com cards simples e imagem padrão.</p>
+        <a class="link" href="/pages/carros.html">Abrir lista de carros</a>
+      </section>
+      <section class="card">
+        <h2>Gerenciar estoque</h2>
+        <p>Cadastre, edite e remova carros usando o token JWT da sua sessão.</p>
+        <a class="link" href="/pages/carros.html#gestao">Ir para gestão</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

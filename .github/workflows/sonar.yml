@@ -35,6 +35,7 @@ jobs:
           mvn -B clean verify sonar:sonar \
             -Dsonar.host.url=${SONAR_HOST_URL} \
             -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.organization=mateusfelix-escolar \
             -Dsonar.projectKey=mateusfelix-escolar_teste-deploy \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco/jacoco.xml
 

@@ -7,10 +7,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,16 +43,16 @@ public class CarroControllerIntegrationTest {
 
 	@Test
 	@DisplayName("POST /carro/salvar - deve retornar 400 para preço negativo")
+	@WithMockUser(username = "testuser", roles = {"VENDEDOR"})
 	void testPostCarroPrecoNegativo() throws Exception {
 		// Criando o JSON na mão para evitar dependências de conversão externa
 		String carroJson = "{\"modelo\":\"Civic\",\"ano\":2023,\"preco\":-50.0}";
 
-		mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/carro/salvar")
+		mockMvc.perform(post("/carro/salvar")
 				.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
 				.content(carroJson))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erro").value(org.hamcrest.Matchers.containsString("O preço do carro não pode ser negativo.")));
+				.andExpect(jsonPath("$.errors.preco").value(org.hamcrest.Matchers.containsString("Preço deve ser positivo")));
 	}
 }
-
 
